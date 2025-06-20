@@ -33,7 +33,7 @@ function loadImageJson(dateStr) {
 
       loadedDates.add(dateStr);
       renderImages(data.images, () => {
-        loadPreviousDate();
+        loadPreviousDate(); // 自動載下一天
       });
     })
     .catch(() => {
@@ -74,7 +74,9 @@ function renderImages(images, callback) {
     if (!window.masonryInstance) {
       window.masonryInstance = new Masonry(gallery, {
         itemSelector: '.grid-item',
-        percentPosition: true,
+        columnWidth: '.grid-sizer',
+        gutter: 16,
+        percentPosition: true
       });
     } else {
       window.masonryInstance.appended(fragment.children);
@@ -99,14 +101,17 @@ function loadNextBatch() {
   loadImageJson(dateStr);
 }
 
+// 初始載入
 loadNextBatch();
 
+// 自動載入（滑到底）
 window.addEventListener("scroll", () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     loadNextBatch();
   }
 });
 
+// Modal 控制
 closeBtn.addEventListener("click", () => {
   imageModal.classList.remove("show");
 });

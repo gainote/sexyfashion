@@ -16,7 +16,7 @@
   </div>
 </nav>
 
-<!-- Carousel 幻燈片 -->
+<!-- Carousel -->
 <div class="container my-4">
   <div id="carouselExampleIndicators" class="carousel slide rounded overflow-hidden border" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -46,9 +46,11 @@
   </div>
 </div>
 
-<!-- 瀑布流圖牆 -->
+<!-- Masonry 瀑布流 -->
 <div class="container my-5">
-  <div id="gallery" class="masonry-grid"></div>
+  <div id="gallery" class="masonry-grid">
+    <div class="grid-sizer"></div> <!-- 🧱 控制欄寬 -->
+  </div>
 </div>
 
 <!-- Modal -->
@@ -66,8 +68,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
 <script src="script.js"></script>
-
 </body>
 </html>

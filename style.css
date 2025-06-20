@@ -1,31 +1,28 @@
-/* 用 Masonry，不再用 Grid 排列 */
 .masonry-grid {
   position: relative;
 }
 
-/* 每一個 grid-item，Masonry 自動排版 */
+/* 🔧 控制欄寬：25% 就是四欄 */
+.grid-sizer {
+  width: 25%;
+}
+
+/* 每個項目一樣寬度 */
 .grid-item {
-  width: 25%; /* 四欄 */
+  width: 25%;
   padding: 8px;
   box-sizing: border-box;
 }
 
+/* RWD */
 @media (max-width: 992px) {
-  .grid-item {
-    width: 33.33%;
-  }
+  .grid-sizer, .grid-item { width: 33.33%; }
 }
-
 @media (max-width: 768px) {
-  .grid-item {
-    width: 50%;
-  }
+  .grid-sizer, .grid-item { width: 50%; }
 }
-
 @media (max-width: 576px) {
-  .grid-item {
-    width: 100%;
-  }
+  .grid-sizer, .grid-item { width: 100%; }
 }
 
 .card {
@@ -33,20 +30,17 @@
   overflow: hidden;
   transition: transform 0.2s ease;
 }
-
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-
 .card-img-top {
-  display: block;
   width: 100%;
   height: auto;
-  border-radius: 0;
+  display: block;
 }
 
-/* Modal 一樣保留 */
+/* Modal */
 #imageModal {
   display: none;
   position: fixed;
@@ -59,18 +53,15 @@
   justify-content: center;
   align-items: center;
 }
-
 #imageModal.show {
   display: flex;
 }
-
 #modalImage {
   max-width: 90%;
   max-height: 90%;
   transition: transform 0.3s ease;
   border-radius: 12px;
 }
-
 .close-btn {
   position: absolute;
   top: 20px;
