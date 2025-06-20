@@ -213,7 +213,7 @@
     }
 
     function renderImages(images) {
-      const fragment = document.createDocumentFragment();
+      const newElements = [];
       
       images.forEach(imgObj => {
         const item = document.createElement("div");
@@ -241,26 +241,32 @@
         
         card.appendChild(img);
         item.appendChild(card);
-        fragment.appendChild(item);
+        newElements.push(item);
       });
       
-      gallery.appendChild(fragment);
+      // 先添加到 DOM
+      newElements.forEach(element => {
+        gallery.appendChild(element);
+      });
       
       // 等待圖片載入完成後重新佈局
-      imagesLoaded(gallery, () => {
+      imagesLoaded(newElements, () => {
         if (!window.masonryInstance) {
           // 初始化 Masonry
           window.masonryInstance = new Masonry(gallery, {
             itemSelector: '.grid-item',
             columnWidth: '.grid-sizer',
-            gutter: 8, // 調整間距
+            gutter: 8,
             percentPosition: true,
             transitionDuration: '0.3s'
           });
         } else {
-          // 添加新元素並重新佈局
-          window.masonryInstance.appended(Array.from(fragment.children));
-          window.masonryInstance.layout();
+          // 告訴 Masonry 有新元素
+          window.masonryInstance.appended(newElements);
+          // 延遲一點再重新佈局，確保 DOM 更新完成
+          setTimeout(() => {
+            window.masonryInstance.layout();
+          }, 50);
         }
         loading = false;
       });
