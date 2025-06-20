@@ -19,7 +19,7 @@
 
     .grid-sizer,
     .grid-item {
-      width: 25%;
+      width: 20%; /* 改為 20% 可以有 5 列 */
       padding: 8px;
       box-sizing: border-box;
     }
@@ -91,16 +91,20 @@
     }
 
     /* 改進響應式斷點 */
+    @media (max-width: 1400px) {
+      .grid-sizer, .grid-item { width: 25%; } /* 4 列 */
+    }
+    
     @media (max-width: 1200px) {
-      .grid-sizer, .grid-item { width: 33.33%; }
+      .grid-sizer, .grid-item { width: 33.33%; } /* 3 列 */
     }
 
     @media (max-width: 768px) {
-      .grid-sizer, .grid-item { width: 50%; }
+      .grid-sizer, .grid-item { width: 50%; } /* 2 列 */
     }
 
     @media (max-width: 576px) {
-      .grid-sizer, .grid-item { width: 100%; }
+      .grid-sizer, .grid-item { width: 100%; } /* 1 列 */
       .masonry-container { padding: 0 10px; }
       .masonry-grid { margin: -5px; }
       .grid-item { padding: 5px; }
