@@ -172,18 +172,19 @@ today = datetime.now().strftime("%Y_%m_%d")
 folder_path = os.path.join("images", today)
 os.makedirs(folder_path, exist_ok=True)
 
-existing_files = [f for f in os.listdir(folder_path) if f.endswith(".png")]
+existing_files = [f for f in os.listdir(folder_path) if f.endswith(".webp")]
 image_index = len(existing_files) + 1
-filename = f"{today}_{image_index:02}.png"
+filename = f"{today}_{image_index:02}.webp"
 output_path = os.path.join(folder_path, filename)
 
-# === Step 5: 將 .webp 轉存為 .png ===
+# === Step 5: 將 .webp 轉存為 .webp ===
 webp_path = result[0]
 
 with Image.open(webp_path) as img:
-    img.convert("RGB").save(output_path, "PNG")
+    img.save(output_path, "WEBP", quality=85)  # 可調整品質（預設 80–85）
 
 print(f"✅ 圖片已儲存：{output_path}")
+
 
 # === Step 6: 更新 data.json ===
 json_path = os.path.join(folder_path, "data.json")
@@ -213,7 +214,7 @@ print(f"📄 data.json 已更新：{json_path}")
 
 # === Step 7: 更新 README.md 每行最多顯示 10 張圖片 ===
 readme_path = os.path.join(folder_path, "README.md")
-image_files = sorted([f for f in os.listdir(folder_path) if f.endswith(".png")])
+image_files = sorted([f for f in os.listdir(folder_path) if f.endswith(".webp")])
 
 readme_lines = ["# Generated Images", ""]
 row = []

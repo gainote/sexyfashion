@@ -21,7 +21,7 @@ function loadImages(batch = 10) {
     if (imgIndex > maxImages) return;
 
     const padded = padNumber(imgIndex);
-    const imgSrc = `images/${folderName}/${filePrefix}_${padded}.png`;
+    const imgSrc = `images/${folderName}/${filePrefix}_${padded}.webp`;
 
     const col = document.createElement("div");
     col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
