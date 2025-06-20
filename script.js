@@ -1,27 +1,40 @@
 const gallery = document.getElementById("gallery");
-let loaded = 0;
-
-// 資料夾與檔案前綴
-const folderName = "2025_06_19";
-const filePrefix = "2025_06_19";
-const maxImages = 50;
-
 const imageModal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 const closeBtn = document.querySelector(".close-btn");
 let zoomed = false;
 
-function padNumber(n) {
-  return n.toString().padStart(2, '0');
+let currentDate = new Date(); // 今天
+let loading = false;
+let imgIndex = 1; // 從第 1 張圖開始
+
+function formatDate(date) {
+  return date.toISOString().split("T")[0].replace(/-/g, "_"); // 2025_06_20
 }
 
-function loadImages(batch = 10) {
-  for (let i = 0; i < batch; i++) {
-    const imgIndex = loaded + i + 1;
-    if (imgIndex > maxImages) return;
+function getImagePaths(dateStr, index) {
+  const padded = String(index).padStart(2, "0");
+  const folder = `images/${dateStr}`;
+  return {
+    thumb: `${folder}/${dateStr}_${padded}_thumb.webp`,
+    full: `${folder}/${dateStr}_${padded}.webp`
+  };
+}
 
-    const padded = padNumber(imgIndex);
-    const imgSrc = `images/${folderName}/${filePrefix}_${padded}_thumb.webp`;
+function tryLoadNextImage(batch = 10) {
+  if (loading) return;
+  loading = true;
+
+  let loadedThisBatch = 0;
+
+  function loadOne() {
+    if (loadedThisBatch >= batch) {
+      loading = false;
+      return;
+    }
+
+    const dateStr = formatDate(currentDate);
+    const { thumb, full } = getImagePaths(dateStr, imgIndex);
 
     const col = document.createElement("div");
     col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
@@ -30,46 +43,72 @@ function loadImages(batch = 10) {
     card.className = "card";
 
     const img = document.createElement("img");
-    img.src = imgSrc;
+    img.src = thumb;
     img.className = "card-img-top";
+    img.loading = "lazy";
 
-    // 錯誤處理：圖片不存在就不顯示
-    img.onerror = function () {
-      col.remove();
+    let failCount = 0;
+
+    img.onload = () => {
+      img.addEventListener("click", () => {
+        modalImage.src = full;
+        modalImage.style.transform = "scale(1)";
+        imageModal.classList.add("show");
+        zoomed = false;
+      });
+
+      card.appendChild(img);
+      col.appendChild(card);
+      gallery.appendChild(col);
+
+      imagesLoaded(gallery, () => {
+        new Masonry(gallery, {
+          itemSelector: ".grid-item",
+          percentPosition: true
+        });
+      });
+
+      imgIndex++;
+      loadedThisBatch++;
+      loadOne(); // load next
     };
 
-    // 點擊顯示 modal
-    img.addEventListener("click", () => {
-      modalImage.src = img.src;
-      modalImage.style.transform = 'scale(1)';
-      imageModal.classList.add("show");
-      zoomed = false;
-    });
+    img.onerror = () => {
+      // 如果這天已無更多圖片，切到前一天
+      failCount++;
+      if (failCount > 3) {
+        // 前一天
+        currentDate.setDate(currentDate.getDate() - 1);
+        imgIndex = 1;
+      } else {
+        imgIndex++;
+      }
+      loadOne(); // 繼續試
+    };
 
-    card.appendChild(img);
-    col.appendChild(card);
-    gallery.appendChild(col);
+    // 預載觸發
+    img.style.display = "none";
+    document.body.appendChild(img); // 觸發 preload（看不到）
   }
 
-  loaded += batch;
-  new Masonry(gallery, { itemSelector: '.grid-item', percentPosition: true });
+  loadOne();
 }
 
-// Modal 行為
+// Modal 控制
 closeBtn.addEventListener("click", () => {
   imageModal.classList.remove("show");
 });
 modalImage.addEventListener("click", () => {
   zoomed = !zoomed;
-  modalImage.style.transform = zoomed ? 'scale(1.5)' : 'scale(1)';
+  modalImage.style.transform = zoomed ? "scale(1.5)" : "scale(1)";
 });
 
-// Infinite scroll
+// Scroll lazy loading
 window.addEventListener("scroll", () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-    loadImages(6);
+    tryLoadNextImage(6);
   }
 });
 
-// 初始載入
-loadImages(10);
+// Init
+tryLoadNextImage(10);
