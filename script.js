@@ -48,10 +48,8 @@ function renderImages(images, callback) {
 
   for (const imgObj of images) {
     const col = document.createElement("div");
-    // col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
-    // 改成純 Masonry 用的：
-    col.className = "grid-item";
-    
+    col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
+
     const card = document.createElement("div");
     card.className = "card shadow-sm";
 
