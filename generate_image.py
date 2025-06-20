@@ -237,7 +237,7 @@ print(f"📄 data.json 已更新：{json_path}")
 
 # === Step 7: 更新 README.md 每行最多顯示 10 張圖片 ===
 readme_path = os.path.join(folder_path, "README.md")
-image_files = sorted([f for f in os.listdir(folder_path) if f.endswith(".webp")])
+image_files = sorted([f for f in os.listdir(folder_path) if ((f.endswith(".webp")) and (not f.endswith("_thumb.webp")))])
 
 readme_lines = ["# Generated Images", ""]
 row = []
