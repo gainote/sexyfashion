@@ -3,7 +3,6 @@
 }
 
 .grid-item {
-  width: 100%;
   margin-bottom: 16px;
 }
 
@@ -11,6 +10,7 @@
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.2s ease;
+  display: block;
 }
 
 .card:hover {

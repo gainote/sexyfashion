@@ -45,8 +45,8 @@ function renderImages(images, callback) {
   const fragment = document.createDocumentFragment();
 
   for (const imgObj of images) {
-    const col = document.createElement("div");
-    col.className = "grid-item";
+    const item = document.createElement("div");
+    item.className = "grid-item";
 
     const card = document.createElement("div");
     card.className = "card shadow-sm";
@@ -64,16 +64,16 @@ function renderImages(images, callback) {
     });
 
     card.appendChild(img);
-    col.appendChild(card);
-    fragment.appendChild(col);
+    item.appendChild(card);
+    fragment.appendChild(item);
   }
 
   gallery.appendChild(fragment);
 
-  imagesLoaded(gallery, () => {
+  imagesLoaded(fragment, () => {
     if (!window.masonryInstance) {
       window.masonryInstance = new Masonry(gallery, {
-        itemSelector: ".grid-item",
+        itemSelector: '.grid-item',
         percentPosition: true,
         gutter: 16
       });
