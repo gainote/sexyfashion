@@ -3,7 +3,6 @@ const imageModal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 const closeBtn = document.querySelector(".close-btn");
 
-let zoomed = false;
 let currentDate = new Date();
 let loading = false;
 const loadedDates = new Set();
@@ -32,19 +31,18 @@ function loadImageJson(dateStr) {
       }
 
       loadedDates.add(dateStr);
-      renderImages(data.images, () => {
-        loadPreviousDate();
-      });
+      renderImages(data.images);
+      loadPreviousDate();
     })
     .catch(() => {
       loadPreviousDate();
     });
 }
 
-function renderImages(images, callback) {
+function renderImages(images) {
   const fragment = document.createDocumentFragment();
 
-  for (const imgObj of images) {
+  images.forEach(imgObj => {
     const item = document.createElement("div");
     item.className = "grid-item";
 
@@ -55,18 +53,18 @@ function renderImages(images, callback) {
     img.src = imgObj.thumb_path;
     img.className = "card-img-top img-fluid";
     img.loading = "lazy";
+    img.alt = imgObj.alt || "藝術攝影";
 
     img.addEventListener("click", () => {
       modalImage.src = imgObj.filename;
       modalImage.style.transform = "scale(1)";
       imageModal.classList.add("show");
-      zoomed = false;
     });
 
     card.appendChild(img);
     item.appendChild(card);
     fragment.appendChild(item);
-  }
+  });
 
   gallery.appendChild(fragment);
 
@@ -82,9 +80,7 @@ function renderImages(images, callback) {
       window.masonryInstance.appended(fragment.children);
       window.masonryInstance.layout();
     }
-
     loading = false;
-    if (typeof callback === "function") callback();
   });
 }
 
@@ -116,6 +112,6 @@ closeBtn.addEventListener("click", () => {
   imageModal.classList.remove("show");
 });
 modalImage.addEventListener("click", () => {
-  zoomed = !zoomed;
-  modalImage.style.transform = zoomed ? 'scale(1.5)' : 'scale(1)';
+  const zoomed = modalImage.style.transform === "scale(1.5)";
+  modalImage.style.transform = zoomed ? "scale(1)" : "scale(1.5)";
 });

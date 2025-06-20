@@ -8,56 +8,36 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#">性感藝術集</a>
-  </div>
-</nav>
-
-<!-- Carousel -->
-<div class="container my-4">
-  <div id="carouselExampleIndicators" class="carousel slide rounded overflow-hidden border" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"></button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">性感藝術集</a>
     </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active"><img src="https://picsum.photos/id/1015/1200/500" class="d-block w-100 rounded" alt=""></div>
-      <div class="carousel-item"><img src="https://picsum.photos/id/1025/1200/500" class="d-block w-100 rounded" alt=""></div>
-      <div class="carousel-item"><img src="https://picsum.photos/id/1035/1200/500" class="d-block w-100 rounded" alt=""></div>
-      <div class="carousel-item"><img src="https://picsum.photos/id/1045/1200/500" class="d-block w-100 rounded" alt=""></div>
-      <div class="carousel-item"><img src="https://picsum.photos/id/1055/1200/500" class="d-block w-100 rounded" alt=""></div>
+  </nav>
+
+  <!-- Gallery -->
+  <div class="masonry-container my-5">
+    <div id="gallery" class="masonry-grid">
+      <div class="grid-sizer"></div>
+      <!-- 圖片將由 JavaScript 動態添加 -->
     </div>
   </div>
-</div>
 
-<!-- Gallery -->
-<div class="masonry-container my-5">
-  <div id="gallery" class="masonry-grid">
-    <div class="grid-sizer"></div>
+  <!-- Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close-btn">×</span>
+    <img id="modalImage" class="modal-content" alt="放大圖片" />
   </div>
-</div>
 
-<!-- Modal -->
-<div id="imageModal" class="modal">
-  <span class="close-btn">&times;</span>
-  <img id="modalImage" class="modal-content" alt="放大圖片" />
-</div>
+  <!-- Footer -->
+  <footer class="text-center text-muted py-4 bg-light">
+    © 2025 性感藝術攝影集
+  </footer>
 
-<!-- Footer -->
-<footer class="text-center text-muted py-4 bg-light">
-  © 2025 性感藝術攝影集
-</footer>
-
-<!-- JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<script src="script.js"></script>
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

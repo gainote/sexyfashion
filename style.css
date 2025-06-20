@@ -19,7 +19,6 @@
 
 .grid-item {
   break-inside: avoid;
-  margin-bottom: 16px;
 }
 
 .card {
@@ -38,8 +37,8 @@
   width: 100%;
   height: auto;
   object-fit: cover;
+  aspect-ratio: 4/3;
   display: block;
-  aspect-ratio: 4/3; /* 統一圖片比例，防止跳動 */
 }
 
 /* Modal */
@@ -98,11 +97,4 @@
   .masonry-container { padding: 0 10px; }
   .masonry-grid { margin: -5px; }
   .grid-item { padding: 5px; }
-}
-
-/* 高解析度螢幕優化 */
-@media (min-resolution: 2dppx) {
-  .card-img-top {
-    image-rendering: optimizeQuality;
-  }
 }
