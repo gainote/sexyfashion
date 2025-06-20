@@ -172,8 +172,8 @@ today = datetime.now().strftime("%Y_%m_%d")
 folder_path = os.path.join("images", today)
 os.makedirs(folder_path, exist_ok=True)
 
-existing_files = [f for f in os.listdir(folder_path) if f.endswith(".webp")]
-image_index = len(existing_files)/2 + 1
+existing_files = [f for f in os.listdir(folder_path) if f.endswith("_thumb.webp")]
+image_index = len(existing_files) + 1
 # filename = f"{today}_{image_index:02}.webp"
 # output_path = os.path.join(folder_path, filename)
 
