@@ -9,12 +9,10 @@ let currentDate = new Date(); // 從今天往回
 let loading = false;
 const loadedDates = new Set(); // 防止重複載入
 
-// 格式化日期為 YYYY_MM_DD
 function formatDate(date) {
   return date.toISOString().split("T")[0].replace(/-/g, "_");
 }
 
-// 載入特定日期 JSON
 function loadImageJson(dateStr) {
   if (loadedDates.has(dateStr)) {
     console.log(`⚠️ 已載入過 ${dateStr}，跳過`);
@@ -35,16 +33,17 @@ function loadImageJson(dateStr) {
         return;
       }
 
-      loadedDates.add(dateStr); // 標記已載入
-      renderImages(data.images);
+      loadedDates.add(dateStr); // ✅ 標記為已載入
+      renderImages(data.images, () => {
+        loadPreviousDate(); // ✅ 載完就自動載下一天
+      });
     })
     .catch(() => {
-      loadPreviousDate();
+      loadPreviousDate(); // JSON 不存在 → 自動跳前一天
     });
 }
 
-// 建立圖片卡片
-function renderImages(images) {
+function renderImages(images, callback) {
   const fragment = document.createDocumentFragment();
 
   for (const imgObj of images) {
@@ -66,16 +65,7 @@ function renderImages(images) {
       zoomed = false;
     });
 
-    // 可選：加入 prompt 在卡片底部（可註解）
-    const cardBody = document.createElement("div");
-    cardBody.className = "card-body p-2";
-    const prompt = document.createElement("p");
-    prompt.className = "card-text small text-muted";
-    prompt.textContent = imgObj.prompt || "";
-    cardBody.appendChild(prompt);
-
     card.appendChild(img);
-    card.appendChild(cardBody);
     col.appendChild(card);
     fragment.appendChild(col);
   }
@@ -92,18 +82,19 @@ function renderImages(images) {
       window.masonryInstance.appended(fragment.children);
       window.masonryInstance.layout();
     }
-  });
 
-  loading = false;
+    loading = false;
+    if (typeof callback === "function") {
+      callback(); // ✅ 載完圖片後載下一天
+    }
+  });
 }
 
-// 前一天
 function loadPreviousDate() {
   currentDate.setDate(currentDate.getDate() - 1);
   loadNextBatch();
 }
 
-// 觸發下一批載入
 function loadNextBatch() {
   if (loading) return;
   loading = true;
