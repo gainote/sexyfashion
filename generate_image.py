@@ -174,16 +174,38 @@ os.makedirs(folder_path, exist_ok=True)
 
 existing_files = [f for f in os.listdir(folder_path) if f.endswith(".webp")]
 image_index = len(existing_files) + 1
-filename = f"{today}_{image_index:02}.webp"
-output_path = os.path.join(folder_path, filename)
+# filename = f"{today}_{image_index:02}.webp"
+# output_path = os.path.join(folder_path, filename)
 
-# === Step 5: 將 .webp 轉存為 .webp ===
-webp_path = result[0]
+# # === Step 5: 將 .webp 轉存為 .webp ===
+# webp_path = result[0]
+
+# with Image.open(webp_path) as img:
+#     img.save(output_path, "WEBP", quality=85)  # 可調整品質（預設 80–85）
+
+# print(f"✅ 圖片已儲存：{output_path}")
+
+base_filename = f"{today}_{image_index:02}"
+output_path = os.path.join(folder_path, f"{base_filename}.webp")
+thumb_path = os.path.join(folder_path, f"{base_filename}_thumb.webp")
+
+# === Step 5: 讀取原始 .webp 並儲存原圖與縮圖 ===
+webp_path = result[0]  # ← 你的來源 .webp 圖檔路徑
 
 with Image.open(webp_path) as img:
-    img.save(output_path, "WEBP", quality=85)  # 可調整品質（預設 80–85）
+    # 儲存原圖
+    img.save(output_path, "WEBP", quality=85)
 
-print(f"✅ 圖片已儲存：{output_path}")
+    # 建立縮圖
+    thumbnail_width = 400
+    ratio = thumbnail_width / img.width
+    new_size = (thumbnail_width, int(img.height * ratio))
+
+    thumb = img.convert("RGB").resize(new_size, Image.LANCZOS)
+    thumb.save(thumb_path, "WEBP", quality=80)
+
+
+
 
 
 # === Step 6: 更新 data.json ===
