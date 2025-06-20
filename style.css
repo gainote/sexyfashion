@@ -1,16 +1,18 @@
 .masonry-grid {
-  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
 }
 
+/* 每張圖片卡片 */
 .grid-item {
-  margin-bottom: 16px;
+  break-inside: avoid;
 }
 
 .card {
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.2s ease;
-  display: block;
 }
 
 .card:hover {
@@ -22,7 +24,6 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 0;
 }
 
 /* Modal */
@@ -34,7 +35,6 @@
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.9);
   justify-content: center;
   align-items: center;

@@ -22,7 +22,7 @@ function loadImageJson(dateStr) {
 
   fetch(jsonUrl)
     .then(res => {
-      if (!res.ok) throw new Error("JSON 不存在");
+      if (!res.ok) throw new Error("找不到 JSON");
       return res.json();
     })
     .then(data => {
@@ -33,7 +33,7 @@ function loadImageJson(dateStr) {
 
       loadedDates.add(dateStr);
       renderImages(data.images, () => {
-        loadPreviousDate();
+        loadPreviousDate(); // 完一批就往前載
       });
     })
     .catch(() => {
@@ -69,22 +69,9 @@ function renderImages(images, callback) {
   }
 
   gallery.appendChild(fragment);
+  loading = false;
 
-  imagesLoaded(fragment, () => {
-    if (!window.masonryInstance) {
-      window.masonryInstance = new Masonry(gallery, {
-        itemSelector: '.grid-item',
-        percentPosition: true,
-        gutter: 16
-      });
-    } else {
-      window.masonryInstance.appended(fragment.children);
-      window.masonryInstance.layout();
-    }
-
-    loading = false;
-    if (typeof callback === "function") callback();
-  });
+  if (typeof callback === "function") callback();
 }
 
 function loadPreviousDate() {
@@ -95,26 +82,27 @@ function loadPreviousDate() {
 function loadNextBatch() {
   if (loading) return;
   loading = true;
+
   const dateStr = formatDate(currentDate);
+  console.log("載入日期：", dateStr);
   loadImageJson(dateStr);
 }
 
+// 初始載入
 loadNextBatch();
 
+// 滾動到底自動載入
 window.addEventListener("scroll", () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     loadNextBatch();
   }
 });
 
-if (closeBtn) {
-  closeBtn.addEventListener("click", () => {
-    imageModal.classList.remove("show");
-  });
-}
-if (modalImage) {
-  modalImage.addEventListener("click", () => {
-    zoomed = !zoomed;
-    modalImage.style.transform = zoomed ? "scale(1.5)" : "scale(1)";
-  });
-}
+// Modal 控制
+closeBtn.addEventListener("click", () => {
+  imageModal.classList.remove("show");
+});
+modalImage.addEventListener("click", () => {
+  zoomed = !zoomed;
+  modalImage.style.transform = zoomed ? "scale(1.5)" : "scale(1)";
+});
