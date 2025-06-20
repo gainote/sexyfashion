@@ -1,7 +1,8 @@
 const gallery = document.getElementById("gallery");
 let loaded = 0;
+const folderDate = "2025-06-20";  // <-- 這裡可以改日期資料夾名稱
+const maxImages = 50;  // 預設最多幾張
 
-// Modal 功能
 const imageModal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 const closeBtn = document.querySelector(".close-btn");
@@ -9,7 +10,9 @@ let zoomed = false;
 
 function loadImages(batch = 10) {
   for (let i = 0; i < batch; i++) {
-    const imgId = 100 + loaded + i;
+    const imgIndex = loaded + i + 1;
+    if (imgIndex > maxImages) return;
+
     const col = document.createElement("div");
     col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
 
@@ -17,11 +20,15 @@ function loadImages(batch = 10) {
     card.className = "card";
 
     const img = document.createElement("img");
-    img.src = `https://picsum.photos/id/${imgId}/400/600`;
+    img.src = `images/${folderDate}/${imgIndex}.png`;
     img.className = "card-img-top";
 
+    img.onerror = function () {
+      col.remove(); // 若圖片不存在就從 DOM 移除
+    };
+
     img.addEventListener("click", () => {
-      modalImage.src = img.src.replace('/400/600', '/800/1200');
+      modalImage.src = img.src;
       modalImage.style.transform = 'scale(1)';
       imageModal.classList.add("show");
       zoomed = false;
@@ -36,7 +43,7 @@ function loadImages(batch = 10) {
   new Masonry(gallery, { itemSelector: '.grid-item', percentPosition: true });
 }
 
-// Modal 行為
+// Modal 關閉與放大
 closeBtn.addEventListener("click", () => {
   imageModal.classList.remove("show");
 });
@@ -45,7 +52,7 @@ modalImage.addEventListener("click", () => {
   modalImage.style.transform = zoomed ? 'scale(1.5)' : 'scale(1)';
 });
 
-// Infinite scroll
+// Infinite scroll 載入更多
 window.addEventListener("scroll", () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     loadImages(6);
