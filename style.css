@@ -1,51 +1,62 @@
-body {
-  background-color: #f8f9fa;
+.masonry-grid {
+  position: relative;
 }
 
-img {
-  border-radius: 10px;
-  object-fit: cover;
+.grid-item {
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-/* 卡片效果 */
 .card {
-  margin-bottom: 1rem;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 10px;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-/* Modal 樣式 */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+}
+
+/* Modal */
 #imageModal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
   display: none;
-  align-items: center;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
   justify-content: center;
-  z-index: 9999;
+  align-items: center;
 }
-#imageModal img {
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
+
 #imageModal.show {
   display: flex;
 }
-#imageModal .close-btn {
+
+#modalImage {
+  max-width: 90%;
+  max-height: 90%;
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+}
+
+.close-btn {
   position: absolute;
   top: 20px;
   right: 30px;
-  font-size: 2rem;
   color: white;
+  font-size: 36px;
+  font-weight: bold;
   cursor: pointer;
-  z-index: 10000;
 }

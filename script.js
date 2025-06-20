@@ -1,13 +1,12 @@
-// DOM 元素定義
 const gallery = document.getElementById("gallery");
 const imageModal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 const closeBtn = document.querySelector(".close-btn");
 
 let zoomed = false;
-let currentDate = new Date(); // 從今天往回
+let currentDate = new Date();
 let loading = false;
-const loadedDates = new Set(); // 防止重複載入
+const loadedDates = new Set();
 
 function formatDate(date) {
   return date.toISOString().split("T")[0].replace(/-/g, "_");
@@ -15,7 +14,6 @@ function formatDate(date) {
 
 function loadImageJson(dateStr) {
   if (loadedDates.has(dateStr)) {
-    console.log(`⚠️ 已載入過 ${dateStr}，跳過`);
     loadPreviousDate();
     return;
   }
@@ -33,13 +31,13 @@ function loadImageJson(dateStr) {
         return;
       }
 
-      loadedDates.add(dateStr); // ✅ 標記為已載入
+      loadedDates.add(dateStr);
       renderImages(data.images, () => {
-        loadPreviousDate(); // ✅ 載完就自動載下一天
+        loadPreviousDate();
       });
     })
     .catch(() => {
-      loadPreviousDate(); // JSON 不存在 → 自動跳前一天
+      loadPreviousDate();
     });
 }
 
@@ -48,7 +46,7 @@ function renderImages(images, callback) {
 
   for (const imgObj of images) {
     const col = document.createElement("div");
-    col.className = "col-sm-6 col-md-4 col-lg-3 grid-item";
+    col.className = "grid-item";
 
     const card = document.createElement("div");
     card.className = "card shadow-sm";
@@ -76,7 +74,8 @@ function renderImages(images, callback) {
     if (!window.masonryInstance) {
       window.masonryInstance = new Masonry(gallery, {
         itemSelector: ".grid-item",
-        percentPosition: true
+        percentPosition: true,
+        gutter: 16
       });
     } else {
       window.masonryInstance.appended(fragment.children);
@@ -84,9 +83,7 @@ function renderImages(images, callback) {
     }
 
     loading = false;
-    if (typeof callback === "function") {
-      callback(); // ✅ 載完圖片後載下一天
-    }
+    if (typeof callback === "function") callback();
   });
 }
 
@@ -98,23 +95,18 @@ function loadPreviousDate() {
 function loadNextBatch() {
   if (loading) return;
   loading = true;
-
   const dateStr = formatDate(currentDate);
-  console.log(`📦 載入日期：${dateStr}`);
   loadImageJson(dateStr);
 }
 
-// 初始載入
 loadNextBatch();
 
-// 滾動觸底自動載入
 window.addEventListener("scroll", () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     loadNextBatch();
   }
 });
 
-// Modal 控制
 if (closeBtn) {
   closeBtn.addEventListener("click", () => {
     imageModal.classList.remove("show");
