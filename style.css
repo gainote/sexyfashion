@@ -1,28 +1,23 @@
+.masonry-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
 .masonry-grid {
+  margin-left: -8px;
   position: relative;
 }
 
-/* 🔧 控制欄寬：25% 就是四欄 */
-.grid-sizer {
-  width: 25%;
-}
-
-/* 每個項目一樣寬度 */
+.grid-sizer,
 .grid-item {
   width: 25%;
-  padding: 8px;
-  box-sizing: border-box;
 }
 
-/* RWD */
-@media (max-width: 992px) {
-  .grid-sizer, .grid-item { width: 33.33%; }
-}
-@media (max-width: 768px) {
-  .grid-sizer, .grid-item { width: 50%; }
-}
-@media (max-width: 576px) {
-  .grid-sizer, .grid-item { width: 100%; }
+.grid-item {
+  padding-left: 8px;
+  margin-bottom: 16px;
+  float: left;
 }
 
 .card {
@@ -30,14 +25,16 @@
   overflow: hidden;
   transition: transform 0.2s ease;
 }
+
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
+
 .card-img-top {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
 }
 
 /* Modal */
@@ -70,4 +67,15 @@
   font-size: 36px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* RWD */
+@media (max-width: 992px) {
+  .grid-sizer, .grid-item { width: 33.33%; }
+}
+@media (max-width: 768px) {
+  .grid-sizer, .grid-item { width: 50%; }
+}
+@media (max-width: 576px) {
+  .grid-sizer, .grid-item { width: 100%; }
 }
