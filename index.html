@@ -10,17 +10,19 @@
       max-width: 1600px;
       margin: 0 auto;
       padding: 0 15px;
+      width: 100%; /* 確保容器填滿寬度 */
     }
 
     .masonry-grid {
       /* 移除 display: flex，讓 Masonry 接管佈局 */
-      margin: -8px;
+      margin: -4px; /* 減少負邊距 */
+      width: 100%; /* 確保網格填滿容器 */
     }
 
     .grid-sizer,
     .grid-item {
       width: 20%; /* 改為 20% 可以有 5 列 */
-      padding: 8px;
+      padding: 4px; /* 減少內邊距 */
       box-sizing: border-box;
     }
 
@@ -106,8 +108,8 @@
     @media (max-width: 576px) {
       .grid-sizer, .grid-item { width: 100%; } /* 1 列 */
       .masonry-container { padding: 0 10px; }
-      .masonry-grid { margin: -5px; }
-      .grid-item { padding: 5px; }
+      .masonry-grid { margin: -2px; }
+      .grid-item { padding: 2px; }
     }
 
     /* 添加載入動畫 */
@@ -260,9 +262,11 @@
           window.masonryInstance = new Masonry(gallery, {
             itemSelector: '.grid-item',
             columnWidth: '.grid-sizer',
-            gutter: 8,
+            gutter: 4,
             percentPosition: true,
-            transitionDuration: '0.3s'
+            transitionDuration: '0.3s',
+            fitWidth: false, /* 先試試關閉 fitWidth */
+            horizontalOrder: true /* 保持水平順序 */
           });
         } else {
           // 告訴 Masonry 有新元素
