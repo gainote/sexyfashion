@@ -213,7 +213,8 @@ json_path = os.path.join(folder_path, "data.json")
 timestamp = datetime.utcnow().isoformat() + "Z"
 
 new_entry = {
-    "filename": filename,
+    "filename": output_path,
+    "thumb_path": thumb_path,
     "prompt": image_prompt,
     "width": width,
     "height": height,
