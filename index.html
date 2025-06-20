@@ -5,7 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>性感藝術攝影集</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    .masonry-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    .masonry-grid {
+      /* 移除 display: flex，讓 Masonry 接管佈局 */
+      margin: -8px;
+    }
+
+    .grid-sizer,
+    .grid-item {
+      width: 25%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .grid-item {
+      /* 移除不必要的屬性 */
+    }
+
+    .card {
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: #fff;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      /* 移除固定的 aspect-ratio，讓圖片保持原始比例 */
+      display: block;
+    }
+
+    /* Modal */
+    #imageModal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #imageModal.show {
+      display: flex;
+    }
+
+    #modalImage {
+      max-width: 90%;
+      max-height: 90vh;
+      transition: transform 0.3s ease;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .close-btn:hover {
+      color: #ccc;
+    }
+
+    /* 改進響應式斷點 */
+    @media (max-width: 1200px) {
+      .grid-sizer, .grid-item { width: 33.33%; }
+    }
+
+    @media (max-width: 768px) {
+      .grid-sizer, .grid-item { width: 50%; }
+    }
+
+    @media (max-width: 576px) {
+      .grid-sizer, .grid-item { width: 100%; }
+      .masonry-container { padding: 0 10px; }
+      .masonry-grid { margin: -5px; }
+      .grid-item { padding: 5px; }
+    }
+
+    /* 添加載入動畫 */
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+
+    /* 確保圖片載入時的平滑過渡 */
+    .card-img-top {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card-img-top.loaded {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
@@ -20,6 +137,9 @@
     <div id="gallery" class="masonry-grid">
       <div class="grid-sizer"></div>
       <!-- 圖片將由 JavaScript 動態添加 -->
+    </div>
+    <div id="loading" class="loading" style="display: none;">
+      載入中...
     </div>
   </div>
 
@@ -38,6 +158,176 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-  <script src="script.js"></script>
+  
+  <script>
+    const gallery = document.getElementById("gallery");
+    const imageModal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const closeBtn = document.querySelector(".close-btn");
+    const loadingDiv = document.getElementById("loading");
+    let currentDate = new Date();
+    let loading = false;
+    const loadedDates = new Set();
+
+    function formatDate(date) {
+      return date.toISOString().split("T")[0].replace(/-/g, "_");
+    }
+
+    function showLoading() {
+      loadingDiv.style.display = 'block';
+    }
+
+    function hideLoading() {
+      loadingDiv.style.display = 'none';
+    }
+
+    function loadImageJson(dateStr) {
+      if (loadedDates.has(dateStr)) {
+        loadPreviousDate();
+        return;
+      }
+
+      showLoading();
+      const jsonUrl = `images/${dateStr}/data.json`;
+      
+      fetch(jsonUrl)
+        .then(res => {
+          if (!res.ok) throw new Error("JSON 不存在");
+          return res.json();
+        })
+        .then(data => {
+          if (!data.images || data.images.length === 0) {
+            loadPreviousDate();
+            return;
+          }
+          loadedDates.add(dateStr);
+          renderImages(data.images);
+          loadPreviousDate();
+        })
+        .catch(() => {
+          loadPreviousDate();
+        })
+        .finally(() => {
+          hideLoading();
+        });
+    }
+
+    function renderImages(images) {
+      const fragment = document.createDocumentFragment();
+      
+      images.forEach(imgObj => {
+        const item = document.createElement("div");
+        item.className = "grid-item";
+        
+        const card = document.createElement("div");
+        card.className = "card shadow-sm";
+        
+        const img = document.createElement("img");
+        img.src = imgObj.thumb_path;
+        img.className = "card-img-top img-fluid";
+        img.loading = "lazy";
+        img.alt = imgObj.alt || "藝術攝影";
+        
+        // 圖片載入完成後添加動畫效果
+        img.onload = function() {
+          this.classList.add('loaded');
+        };
+        
+        img.addEventListener("click", () => {
+          modalImage.src = imgObj.filename;
+          modalImage.style.transform = "scale(1)";
+          imageModal.classList.add("show");
+        });
+        
+        card.appendChild(img);
+        item.appendChild(card);
+        fragment.appendChild(item);
+      });
+      
+      gallery.appendChild(fragment);
+      
+      // 等待圖片載入完成後重新佈局
+      imagesLoaded(gallery, () => {
+        if (!window.masonryInstance) {
+          // 初始化 Masonry
+          window.masonryInstance = new Masonry(gallery, {
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            gutter: 8, // 調整間距
+            percentPosition: true,
+            transitionDuration: '0.3s'
+          });
+        } else {
+          // 添加新元素並重新佈局
+          window.masonryInstance.appended(Array.from(fragment.children));
+          window.masonryInstance.layout();
+        }
+        loading = false;
+      });
+    }
+
+    function loadPreviousDate() {
+      currentDate.setDate(currentDate.getDate() - 1);
+      setTimeout(() => {
+        loadNextBatch();
+      }, 100); // 添加小延遲避免過快載入
+    }
+
+    function loadNextBatch() {
+      if (loading) return;
+      loading = true;
+      const dateStr = formatDate(currentDate);
+      loadImageJson(dateStr);
+    }
+
+    // 初始化
+    loadNextBatch();
+
+    // 滾動到底載入
+    let scrollTimeout;
+    window.addEventListener("scroll", () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+          loadNextBatch();
+        }
+      }, 100);
+    });
+
+    // Modal 事件
+    closeBtn.addEventListener("click", () => {
+      imageModal.classList.remove("show");
+    });
+
+    modalImage.addEventListener("click", () => {
+      const zoomed = modalImage.style.transform === "scale(1.5)";
+      modalImage.style.transform = zoomed ? "scale(1)" : "scale(1.5)";
+    });
+
+    // 點擊模態背景關閉
+    imageModal.addEventListener("click", (e) => {
+      if (e.target === imageModal) {
+        imageModal.classList.remove("show");
+      }
+    });
+
+    // ESC 鍵關閉模態
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        imageModal.classList.remove("show");
+      }
+    });
+
+    // 響應式重新佈局
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (window.masonryInstance) {
+          window.masonryInstance.layout();
+        }
+      }, 250);
+    });
+  </script>
 </body>
 </html>
