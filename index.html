@@ -9,7 +9,7 @@
   <style>
     /* 網站介紹區域樣式 */
     .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #D2B48C 100%);
       color: white;
       padding: 60px 0;
       position: relative;
@@ -47,13 +47,13 @@
     
     .ai-badge {
       display: inline-block;
-      background: rgba(255,255,255,0.2);
+      background: rgba(210, 180, 140, 0.3);
       padding: 8px 16px;
       border-radius: 25px;
       font-size: 0.9rem;
       margin-bottom: 1rem;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(210, 180, 140, 0.5);
     }
 
     /* 改良的幻燈片樣式 */
@@ -104,7 +104,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.9);
+      background: rgba(139, 69, 19, 0.9);
       border: none;
       width: 50px;
       height: 50px;
@@ -119,7 +119,7 @@
     }
     
     .carousel-nav:hover {
-      background: white;
+      background: rgba(139, 69, 19, 1);
       transform: translateY(-50%) scale(1.1);
     }
     
@@ -133,7 +133,7 @@
     
     .carousel-nav i {
       font-size: 18px;
-      color: #333;
+      color: white;
     }
     
     /* 指示器 */
@@ -145,6 +145,8 @@
       display: flex;
       gap: 10px;
       z-index: 10;
+      justify-content: center;
+      align-items: center;
     }
     
     .carousel-indicator {
@@ -155,11 +157,13 @@
       cursor: pointer;
       transition: all 0.3s ease;
       border: 2px solid transparent;
+      flex-shrink: 0;
     }
     
     .carousel-indicator.active {
-      background: white;
+      background: rgba(210, 180, 140, 1);
       transform: scale(1.2);
+      border-color: white;
     }
     
     /* 既有樣式保持不變 */
@@ -385,7 +389,7 @@
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);">
     <div class="container">
       <a class="navbar-brand" href="https://gainote.github.io/sexyfashion/">SexyFashion | 性感時尚</a>
     </div>
