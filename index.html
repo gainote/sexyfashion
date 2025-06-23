@@ -1,23 +1,3 @@
-image.png
-
-<!DOCTYPE html> <html lang="zh-Hant"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>SexyFashion | 性感時尚</title> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /> <li
-
-pasted
-
-目前點擊照片後 會這樣呈現 但是我不希望出現白色的部分 請幫我優化 然後我想要同時在右邊出現一些欄位 從data.json中抓出這張圖片的資訊  用美感呈現 設計理念 (其實就是 "prompt": "A luminous backlit silhouette of a slender, graceful woman exuding confident elegance, her delicate skin softly illuminated through the gentle glow of diffused light, as she stands poised with a subtle tilt of her head, revealing a refined neckline and full bust, adorned in impeccably tailored lingerie crafted from whisper-weight lace and sumptuous silk\u2014its intricate floral patterns gracefully framing her figure, accented by a delicate satin ribbon tied into an elegant bow at her hip\u2014where the fabric seamlessly floats with her movement, capturing a harmonious interplay of light and shadow in warm olive and cream tones, evoking an intimacy of beauty and understated opulence that celebrates natural femininity, sophistication, and the effortless allure of high-end craftsmanship.")
-
-Edit
-我來幫您優化這個模態框，移除白色背景並在右側添加圖片資訊展示。
-
-
-優化版圖片畫廊 - 全屏模態框與資訊面板
-Interactive artifact 
-
-
-
-
-Continue
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -237,7 +217,7 @@ Continue
       opacity: 1;
     }
 
-    /* 優化後的 Modal 樣式 */
+    /* Modal */
     #imageModal {
       display: none;
       position: fixed;
@@ -247,188 +227,42 @@ Continue
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
     #imageModal.show {
       display: flex;
     }
 
-    .modal-content-wrapper {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    .modal-image-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      overflow: hidden;
-    }
-
     #modalImage {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      max-width: 90%;
+      max-height: 90vh;
       transition: transform 0.3s ease;
-      cursor: zoom-in;
       border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      object-fit: contain;
+      cursor: zoom-in;
     }
 
     #modalImage.zoomed {
       cursor: zoom-out;
-      transform: scale(1.5);
     }
 
-    /* 資訊面板樣式 */
-    .modal-info-panel {
-      width: 400px;
-      background: linear-gradient(145deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
-      backdrop-filter: blur(20px);
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .modal-info-panel.show {
-      transform: translateX(0);
-    }
-
-    .info-header {
-      margin-bottom: 25px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 20px;
-    }
-
-    .info-title {
-      color: #D2B48C;
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .info-subtitle {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .info-section {
-      margin-bottom: 25px;
-    }
-
-    .info-section-title {
-      color: #D2B48C;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .info-content {
-      color: rgba(255, 255, 255, 0.9);
-      line-height: 1.6;
-      font-size: 0.95rem;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      border-left: 3px solid #D2B48C;
-      font-style: italic;
-    }
-
-    .info-meta {
-      display: grid;
-      gap: 12px;
-    }
-
-    .info-meta-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 15px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .info-meta-label {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .info-meta-value {
-      color: #D2B48C;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    /* 關閉按鈕優化 */
     .close-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 15px;
+      right: 25px;
       color: white;
-      font-size: 28px;
+      font-size: 40px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: color 0.2s ease;
       z-index: 2001;
-      background: rgba(0, 0, 0, 0.5);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
     }
 
     .close-btn:hover {
-      background: rgba(220, 53, 69, 0.8);
-      transform: scale(1.1);
-    }
-
-    /* 資訊面板切換按鈕 */
-    .info-toggle-btn {
-      position: absolute;
-      top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      background: rgba(210, 180, 140, 0.9);
-      border: none;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 2001;
-      backdrop-filter: blur(10px);
-    }
-
-    .info-toggle-btn:hover {
-      background: rgba(210, 180, 140, 1);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .info-toggle-btn.active {
-      right: 420px;
-      background: rgba(220, 53, 69, 0.9);
+      color: #ccc;
     }
 
     /* 響應式調整 */
@@ -439,14 +273,6 @@ Continue
       }
       .hero-title {
         font-size: 2.8rem;
-      }
-      
-      .modal-info-panel {
-        width: 350px;
-      }
-      
-      .info-toggle-btn.active {
-        right: 370px;
       }
     }
 
@@ -477,34 +303,6 @@ Continue
       .carousel-nav.next {
         right: 10px;
       }
-      
-      .modal-content-wrapper {
-        flex-direction: column;
-      }
-      
-      .modal-info-panel {
-        width: 100%;
-        height: 50%;
-        transform: translateY(100%);
-        border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      .modal-info-panel.show {
-        transform: translateY(0);
-      }
-      
-      .info-toggle-btn {
-        top: auto;
-        bottom: 20px;
-        right: 20px;
-        transform: none;
-      }
-      
-      .info-toggle-btn.active {
-        right: 20px;
-        bottom: 20px;
-      }
     }
 
     @media (max-width: 576px) {
@@ -526,14 +324,6 @@ Continue
       }
       .carousel-container {
         height: 250px;
-      }
-      
-      .modal-info-panel {
-        padding: 20px;
-      }
-      
-      .info-title {
-        font-size: 1.2rem;
       }
     }
 
@@ -594,25 +384,6 @@ Continue
     /* 平滑動畫效果 */
     * {
       -webkit-tap-highlight-color: transparent;
-    }
-
-    /* 滾動條美化 */
-    .modal-info-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .modal-info-panel::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-    }
-
-    .modal-info-panel::-webkit-scrollbar-thumb {
-      background: rgba(210, 180, 140, 0.5);
-      border-radius: 3px;
-    }
-
-    .modal-info-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(210, 180, 140, 0.8);
     }
   </style>
 </head>
@@ -703,48 +474,10 @@ Continue
     </div>
   </div>
 
-  <!-- 優化後的 Modal -->
+  <!-- Modal -->
   <div id="imageModal" class="modal">
-    <div class="modal-content-wrapper">
-      <div class="modal-image-container">
-        <img id="modalImage" class="modal-content" alt="放大圖片" />
-      </div>
-      
-      <div class="modal-info-panel" id="infoPanel">
-        <div class="info-header">
-          <div class="info-title">
-            <i class="fas fa-palette"></i>
-            藝術作品詳情
-          </div>
-          <div class="info-subtitle">AI Generated Art</div>
-        </div>
-        
-        <div class="info-section">
-          <div class="info-section-title">
-            <i class="fas fa-lightbulb"></i>
-            創作理念
-          </div>
-          <div class="info-content" id="promptContent">
-            載入中...
-          </div>
-        </div>
-        
-        <div class="info-section">
-          <div class="info-section-title">
-            <i class="fas fa-info-circle"></i>
-            作品資訊
-          </div>
-          <div class="info-meta" id="metaContent">
-            <!-- 動態生成 -->
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <span class="close-btn" id="closeBtn">×</span>
-    <button class="info-toggle-btn" id="infoToggleBtn">
-      <i class="fas fa-info"></i>
-    </button>
+    <span class="close-btn">×</span>
+    <img id="modalImage" class="modal-content" alt="放大圖片" />
   </div>
 
   <!-- Footer -->
