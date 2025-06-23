@@ -386,7 +386,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* 修正後的 Modal 樣式 - 替換原有的相關樣式 */
+    /* 替換原有的 #imageModal 和相關樣式 */
 #imageModal {
   display: none;
   position: fixed;
@@ -407,6 +407,8 @@
   display: flex;
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 
@@ -415,29 +417,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;
-  position: relative;
-  overflow: hidden;
+  padding: 20px;
+  max-width: 70%;
 }
 
 #modalImage {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 90vh;
   transition: transform 0.3s ease;
+  border-radius: 8px;
   object-fit: contain;
   cursor: zoom-in;
-  display: block;
 }
 
 #modalImage.zoomed {
   cursor: zoom-out;
   transform: scale(1.5);
-  object-fit: contain;
 }
 
 .modal-info-panel {
-  width: 400px;
-  min-width: 400px;
+  width: 350px;
   height: 100%;
   background: linear-gradient(135deg, rgba(139, 69, 19, 0.95) 0%, rgba(160, 82, 45, 0.95) 100%);
   backdrop-filter: blur(20px);
@@ -446,7 +445,6 @@
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
   color: white;
   position: relative;
-  flex-shrink: 0;
 }
 
 .modal-info-panel::before {
@@ -496,8 +494,6 @@
   padding: 12px 15px;
   border-radius: 8px;
   border-left: 3px solid rgba(210, 180, 140, 0.8);
-  word-wrap: break-word;
-  white-space: pre-wrap;
 }
 
 .close-btn {
@@ -526,18 +522,13 @@
 }
 
 /* 響應式設計 */
-@media (max-width: 1200px) {
-  .modal-info-panel {
-    width: 350px;
-    min-width: 350px;
-  }
-}
-
 @media (max-width: 1024px) {
   .modal-info-panel {
-    width: 320px;
-    min-width: 320px;
-    padding: 25px;
+    width: 300px;
+  }
+  
+  .modal-image-container {
+    max-width: calc(100% - 300px);
   }
 }
 
@@ -547,19 +538,19 @@
   }
   
   .modal-image-container {
+    max-width: 100%;
     flex: 1;
-    height: 60%;
+    padding: 10px;
   }
   
   .modal-info-panel {
     width: 100%;
-    min-width: auto;
     height: 40%;
     padding: 20px;
   }
   
   #modalImage {
-    object-fit: contain;
+    max-height: 60vh;
   }
 }
   </style>
