@@ -168,6 +168,18 @@
       border-radius: 12px;
     }
 
+    /* 結束訊息樣式 */
+    #endMessage {
+      font-size: 16px;
+      color: #6c757d;
+      padding: 30px 20px;
+      margin-top: 20px;
+      border-top: 1px solid #dee2e6;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
     @keyframes loading {
       0% {
         background-position: 200% 0;
@@ -195,6 +207,12 @@
     <div id="loading" class="loading" style="display: none;">
       載入中
     </div>
+    <div id="endMessage" class="text-center py-4" style="display: none;">
+      <div class="text-muted">
+        <i class="fas fa-check-circle me-2"></i>
+        已經到底囉！沒有更多圖片了
+      </div>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -219,8 +237,10 @@
     const modalImage = document.getElementById("modalImage");
     const closeBtn = document.querySelector(".close-btn");
     const loadingDiv = document.getElementById("loading");
+    const endMessageDiv = document.getElementById("endMessage");
     let currentDate = new Date();
     let loading = false;
+    let hasReachedEnd = false; // 添加標記是否已到底
     const loadedDates = new Set();
     let masonryInstance = null;
 
@@ -229,11 +249,19 @@
     }
 
     function showLoading() {
-      loadingDiv.style.display = 'block';
+      if (!hasReachedEnd) {
+        loadingDiv.style.display = 'block';
+      }
     }
 
     function hideLoading() {
       loadingDiv.style.display = 'none';
+    }
+
+    function showEndMessage() {
+      hideLoading();
+      endMessageDiv.style.display = 'block';
+      hasReachedEnd = true;
     }
 
     function initMasonry() {
@@ -248,15 +276,20 @@
     }
 
     function loadImageJson(dateStr, retryCount = 0) {
+      // 如果已經到底了，不再載入
+      if (hasReachedEnd) {
+        return;
+      }
+
       if (loadedDates.has(dateStr)) {
         loadPreviousDate();
         return;
       }
 
       // 防止無限重試，最多重試 7 天
-      if (retryCount > 7) {
-        console.log(`已重試 ${retryCount} 天，停止載入`);
-        hideLoading();
+      if (retryCount >= 7) {
+        console.log(`已重試 ${retryCount} 天，已到底部`);
+        showEndMessage();
         loading = false;
         return;
       }
@@ -393,7 +426,7 @@
     }
 
     function loadNextBatch() {
-      if (loading) return;
+      if (loading || hasReachedEnd) return;
       loading = true;
       const dateStr = formatDate(currentDate);
       loadImageJson(dateStr, 0); // 從重試次數 0 開始
@@ -408,7 +441,7 @@
     window.addEventListener("scroll", () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+        if (!hasReachedEnd && window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
           loadNextBatch();
         }
       }, 100);
