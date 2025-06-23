@@ -247,34 +247,69 @@
       }
     }
 
-    function loadImageJson(dateStr) {
+    function loadImageJson(dateStr, retryCount = 0) {
       if (loadedDates.has(dateStr)) {
         loadPreviousDate();
+        return;
+      }
+
+      // 防止無限重試，最多重試 7 天
+      if (retryCount > 7) {
+        console.log(`已重試 ${retryCount} 天，停止載入`);
+        hideLoading();
+        loading = false;
         return;
       }
 
       showLoading();
       const jsonUrl = `images/${dateStr}/data.json`;
       
+      console.log(`嘗試載入: ${jsonUrl} (重試次數: ${retryCount})`);
+      
       fetch(jsonUrl)
         .then(res => {
-          if (!res.ok) throw new Error("JSON 不存在");
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: JSON 不存在 - ${jsonUrl}`);
+          }
           return res.json();
         })
         .then(data => {
           if (!data.images || data.images.length === 0) {
-            loadPreviousDate();
+            console.log(`${dateStr} 的圖片數據為空，嘗試前一天`);
+            // 日期往前一天，重試
+            currentDate.setDate(currentDate.getDate() - 1);
+            const newDateStr = formatDate(currentDate);
+            setTimeout(() => {
+              loadImageJson(newDateStr, retryCount + 1);
+            }, 100);
             return;
           }
+          
+          console.log(`成功載入 ${dateStr}，共 ${data.images.length} 張圖片`);
           loadedDates.add(dateStr);
           renderImages(data.images);
-          loadPreviousDate();
+          
+          // 成功載入後，繼續載入前一天
+          setTimeout(() => {
+            loadPreviousDate();
+          }, 200);
         })
-        .catch(() => {
-          loadPreviousDate();
+        .catch(error => {
+          console.log(`載入失敗: ${error.message}`);
+          // 載入失敗，日期往前一天重試
+          currentDate.setDate(currentDate.getDate() - 1);
+          const newDateStr = formatDate(currentDate);
+          setTimeout(() => {
+            loadImageJson(newDateStr, retryCount + 1);
+          }, 100);
         })
         .finally(() => {
-          hideLoading();
+          // 只有在最後一次重試後才隱藏載入指示器
+          if (retryCount === 0) {
+            setTimeout(() => {
+              hideLoading();
+            }, 500);
+          }
         });
     }
 
@@ -354,17 +389,18 @@
       currentDate.setDate(currentDate.getDate() - 1);
       setTimeout(() => {
         loadNextBatch();
-      }, 100);
+      }, 200); // 增加延遲避免過快載入
     }
 
     function loadNextBatch() {
       if (loading) return;
       loading = true;
       const dateStr = formatDate(currentDate);
-      loadImageJson(dateStr);
+      loadImageJson(dateStr, 0); // 從重試次數 0 開始
     }
 
-    // 初始化
+    // 初始化 - 從今天開始，但如果找不到會自動往前找
+    console.log(`開始載入，初始日期: ${formatDate(currentDate)}`);
     loadNextBatch();
 
     // 滾動到底載入
