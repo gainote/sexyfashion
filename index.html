@@ -385,6 +385,174 @@
     * {
       -webkit-tap-highlight-color: transparent;
     }
+
+    /* 替換原有的 #imageModal 和相關樣式 */
+#imageModal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  padding: 0;
+}
+
+#imageModal.show {
+  display: flex;
+}
+
+.modal-content-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.modal-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  max-width: 70%;
+}
+
+#modalImage {
+  max-width: 100%;
+  max-height: 90vh;
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+#modalImage.zoomed {
+  cursor: zoom-out;
+  transform: scale(1.5);
+}
+
+.modal-info-panel {
+  width: 350px;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.95) 0%, rgba(160, 82, 45, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  overflow-y: auto;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+  color: white;
+  position: relative;
+}
+
+.modal-info-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="white" opacity="0.05"><circle cx="20" cy="20" r="2"/><circle cx="80" cy="40" r="1.5"/><circle cx="40" cy="70" r="1"/><circle cx="70" cy="85" r="2"/><circle cx="10" cy="60" r="1.5"/></svg>');
+  pointer-events: none;
+}
+
+.info-content {
+  position: relative;
+  z-index: 1;
+}
+
+.info-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(210, 180, 140, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-section {
+  margin-bottom: 25px;
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: rgba(210, 180, 140, 1);
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-value {
+  font-size: 1rem;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 15px;
+  border-radius: 8px;
+  border-left: 3px solid rgba(210, 180, 140, 0.8);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2001;
+  background: rgba(139, 69, 19, 0.8);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.close-btn:hover {
+  background: rgba(139, 69, 19, 1);
+  transform: scale(1.1);
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+  .modal-info-panel {
+    width: 300px;
+  }
+  
+  .modal-image-container {
+    max-width: calc(100% - 300px);
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content-wrapper {
+    flex-direction: column;
+  }
+  
+  .modal-image-container {
+    max-width: 100%;
+    flex: 1;
+    padding: 10px;
+  }
+  
+  .modal-info-panel {
+    width: 100%;
+    height: 40%;
+    padding: 20px;
+  }
+  
+  #modalImage {
+    max-height: 60vh;
+  }
+}
   </style>
 </head>
 <body>
@@ -474,11 +642,51 @@
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="imageModal" class="modal">
-    <span class="close-btn">×</span>
-    <img id="modalImage" class="modal-content" alt="放大圖片" />
+  <!-- 替換原有的 Modal HTML -->
+<div id="imageModal" class="modal">
+  <span class="close-btn">×</span>
+  <div class="modal-content-wrapper">
+    <div class="modal-image-container">
+      <img id="modalImage" class="modal-content" alt="放大圖片" />
+    </div>
+    <div class="modal-info-panel">
+      <div class="info-content">
+        <h3 class="info-title">
+          <i class="fas fa-palette"></i>
+          藝術作品資訊
+        </h3>
+        
+        <div class="info-section">
+          <div class="info-label">
+            <i class="fas fa-image me-2"></i>檔案名稱
+          </div>
+          <div class="info-value" id="infoFilename">載入中...</div>
+        </div>
+        
+        <div class="info-section">
+          <div class="info-label">
+            <i class="fas fa-lightbulb me-2"></i>設計理念
+          </div>
+          <div class="info-value" id="infoPrompt">載入中...</div>
+        </div>
+        
+        <div class="info-section">
+          <div class="info-label">
+            <i class="fas fa-calendar me-2"></i>創作日期
+          </div>
+          <div class="info-value" id="infoDate">載入中...</div>
+        </div>
+        
+        <div class="info-section">
+          <div class="info-label">
+            <i class="fas fa-tag me-2"></i>作品編號
+          </div>
+          <div class="info-value" id="infoIndex">載入中...</div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
   <!-- Footer -->
   <footer class="text-center text-muted py-4 bg-light">
@@ -788,12 +996,63 @@
           item.remove();
         };
         
-        img.addEventListener("click", () => {
-          modalImage.src = imgObj.filename;
-          modalImage.style.transform = "scale(1)";
-          modalImage.classList.remove('zoomed');
-          imageModal.classList.add("show");
-        });
+        // 1. 在 renderImages 函數中，找到圖片點擊事件的部分，替換為：
+img.addEventListener("click", () => {
+  // 顯示圖片
+  modalImage.src = imgObj.filename;
+  modalImage.style.transform = "scale(1)";
+  modalImage.classList.remove('zoomed');
+  
+  // 更新資訊面板
+  updateModalInfo(imgObj);
+  
+  imageModal.classList.add("show");
+});
+
+// 2. 添加新的函數來更新 modal 資訊：
+function updateModalInfo(imgObj) {
+  // 獲取資訊元素
+  const infoFilename = document.getElementById('infoFilename');
+  const infoPrompt = document.getElementById('infoPrompt');
+  const infoDate = document.getElementById('infoDate');
+  const infoIndex = document.getElementById('infoIndex');
+  
+  // 從檔案路徑提取日期和索引
+  const pathParts = imgObj.filename.split('/');
+  const fileName = pathParts[pathParts.length - 1];
+  const datePart = pathParts[pathParts.length - 2];
+  
+  // 更新各個欄位
+  infoFilename.textContent = fileName || '未知檔案';
+  infoPrompt.textContent = imgObj.prompt || imgObj.alt || '暫無設計理念描述';
+  infoDate.textContent = datePart ? datePart.replace(/_/g, '-') : '未知日期';
+  
+  // 從檔名提取編號
+  const indexMatch = fileName.match(/_(\d+)\.webp$/);
+  const indexNumber = indexMatch ? indexMatch[1] : '未知';
+  infoIndex.textContent = `#${indexNumber}`;
+}
+
+// 3. 更新 modal 圖片點擊事件（縮放功能）：
+modalImage.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const isZoomed = modalImage.classList.contains('zoomed');
+  if (isZoomed) {
+    modalImage.style.transform = "scale(1)";
+    modalImage.classList.remove('zoomed');
+  } else {
+    modalImage.style.transform = "scale(1.5)";
+    modalImage.classList.add('zoomed');
+  }
+});
+
+// 4. 更新 modal 關閉事件：
+imageModal.addEventListener("click", (e) => {
+  // 只有點擊到圖片容器或背景時才關閉，避免點擊資訊面板時關閉
+  if (e.target === imageModal || e.target.closest('.modal-image-container')) {
+    imageModal.classList.remove("show");
+  }
+});
         
         card.appendChild(img);
         item.appendChild(card);
