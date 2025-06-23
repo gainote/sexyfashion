@@ -681,7 +681,7 @@
           <div class="info-label">
             <i class="fas fa-download me-2"></i>作品編號
           </div>
-          <div class="info-value">下載原圖</div>
+          <div class="info-value"><a href="/images/myw3schoolsimage.jpg" id="imageDownload" download>下載原圖</a></div>
         </div>
       </div>
     </div>
@@ -1015,7 +1015,7 @@ function updateModalInfo(imgObj) {
   const infoFilename = document.getElementById('infoFilename');
   const infoPrompt = document.getElementById('infoPrompt');
   const infoDate = document.getElementById('infoDate');
-
+  const imageDownload = document.getElementById('imageDownload');
   
   // 從檔案路徑提取日期和索引
   const pathParts = imgObj.filename.split('/');
@@ -1029,7 +1029,8 @@ function updateModalInfo(imgObj) {
   
   // 從檔名提取編號
   const indexMatch = fileName.match(/_(\d+)\.webp$/);
-
+  const indexNumber = indexMatch ? indexMatch[1] : '未知';
+  imageDownload.href = imgObj.filename;
 }
 
 // 3. 更新 modal 圖片點擊事件（縮放功能）：
