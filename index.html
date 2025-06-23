@@ -553,10 +553,6 @@
     max-height: 60vh;
   }
 }
-/* 方案2: 直接改變白色背景 */
-.modal-content {
-  background-color: transparent; /* 移除白色背景 */
-}
   </style>
 </head>
 <body>
@@ -679,6 +675,13 @@
             <i class="fas fa-calendar me-2"></i>創作日期
           </div>
           <div class="info-value" id="infoDate">載入中...</div>
+        </div>
+        
+        <div class="info-section">
+          <div class="info-label">
+            <i class="fas fa-tag me-2"></i>作品編號
+          </div>
+          <div class="info-value" id="infoIndex">載入中...</div>
         </div>
       </div>
     </div>
@@ -1012,6 +1015,7 @@ function updateModalInfo(imgObj) {
   const infoFilename = document.getElementById('infoFilename');
   const infoPrompt = document.getElementById('infoPrompt');
   const infoDate = document.getElementById('infoDate');
+  const infoIndex = document.getElementById('infoIndex');
   
   // 從檔案路徑提取日期和索引
   const pathParts = imgObj.filename.split('/');
@@ -1025,6 +1029,8 @@ function updateModalInfo(imgObj) {
   
   // 從檔名提取編號
   const indexMatch = fileName.match(/_(\d+)\.webp$/);
+  const indexNumber = indexMatch ? indexMatch[1] : '未知';
+  infoIndex.textContent = `#${indexNumber}`;
 }
 
 // 3. 更新 modal 圖片點擊事件（縮放功能）：
