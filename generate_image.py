@@ -98,7 +98,7 @@ The image must depict:
 - The lingerie should be elegant, well-fitted, and described in rich detail
 - The model should have a **slim, graceful figure with a naturally full bust**, consistent with high-fashion editorial standards
 - The scene should reflect tasteful beauty, intimate elegance, and premium brand sophistication
-
+- The girl must be Asian
 Use the following creative inspiration:
 
 - **Subject(s)**: {', '.join(chosen['subject'])}
