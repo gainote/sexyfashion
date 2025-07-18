@@ -207,6 +207,15 @@
       "height": 1024,
       "style": "landscape",
       "timestamp": "2025-07-18T15:25:21.626096Z"
+    },
+    {
+      "filename": "images/2025_07_18/2025_07_18_24.webp",
+      "thumb_path": "images/2025_07_18/2025_07_18_24_thumb.webp",
+      "prompt": "502 Bad Gateway\nAn error occurred while opening a stream to the origin.",
+      "width": 1080,
+      "height": 1920,
+      "style": "vertical-hd",
+      "timestamp": "2025-07-18T15:45:52.244578Z"
     }
   ]
 }
