@@ -306,6 +306,15 @@
       "height": 1024,
       "style": "landscape",
       "timestamp": "2025-07-21T20:47:30.263533Z"
+    },
+    {
+      "filename": "images/2025_07_21/2025_07_21_35.webp",
+      "thumb_path": "images/2025_07_21/2025_07_21_35_thumb.webp",
+      "prompt": "Bathed",
+      "width": 1080,
+      "height": 1920,
+      "style": "vertical-hd",
+      "timestamp": "2025-07-21T21:23:09.808372Z"
     }
   ]
 }
