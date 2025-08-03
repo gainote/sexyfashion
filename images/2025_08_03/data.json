@@ -1,0 +1,14 @@
+{
+  "date": "2025_08_03",
+  "images": [
+    {
+      "filename": "images/2025_08_03/2025_08_03_01.webp",
+      "thumb_path": "images/2025_08_03/2025_08_03_01_thumb.webp",
+      "prompt": "502 Bad Gateway\nUnable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared",
+      "width": 1280,
+      "height": 1024,
+      "style": "landscape",
+      "timestamp": "2025-08-03T02:10:16.952676Z"
+    }
+  ]
+}
