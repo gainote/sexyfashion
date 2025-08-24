@@ -905,7 +905,7 @@
         return;
       }
 
-      if (retryCount >= 7) {
+      if (retryCount >= 30) {
         console.log(`已重試 ${retryCount} 天，已到底部`);
         showEndMessage();
         loading = false;
