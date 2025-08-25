@@ -207,6 +207,15 @@
       "height": 928,
       "style": "16:9",
       "timestamp": "2025-08-25T07:31:41.696760Z"
+    },
+    {
+      "filename": "images/2025_08_25/2025_08_25_24.webp",
+      "thumb_path": "images/2025_08_25/2025_08_25_24_thumb.webp",
+      "prompt": "In a softly lit, intimate setting, an elegant Asian beauty exudes confidence and allure as she gazes directly at the viewer, her slim, graceful figure",
+      "width": 1024,
+      "height": 1024,
+      "style": "square",
+      "timestamp": "2025-08-25T07:42:29.803464Z"
     }
   ]
 }
