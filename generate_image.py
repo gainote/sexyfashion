@@ -137,7 +137,7 @@ response = client.chat.completions.create(
     ]
 )
 
-image_prompt = response.choices[0].message.content.strip()
+image_prompt = response.choices[0].message.content.strip()+ ', large breasts, deep cleavage, beautiful girl, light smile'
 print("🎨 Prompt:", image_prompt)
 
 # === Step 2: 定義並選取圖片尺寸（所有尺寸皆 ≥ 1024） ===
